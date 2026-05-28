@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Side Quest – Adventure starts off the main path</title>
+
+  <!--
+    FONTS:
+    - "Ansing" is used for the app name/logo. To activate it:
+        1. Get the Ansing font file (e.g. Ansing.woff2)
+        2. Place it next to this index.html
+        3. Uncomment the @font-face block in the CSS below
+        4. Replace 'Georgia, serif' with 'Ansing, serif' in .logo and .hero-title
+    - Montserrat is loaded from Google Fonts for all other text
+  -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
+
+  <style>
+    /*
+    ══════════════════════════════════════════
+      SWAP ANSING IN HERE WHEN YOU HAVE THE FILE
+      @font-face {
+        font-family: 'Ansing';
+        src: url('Ansing.woff2') format('woff2'),
+             url('Ansing.ttf')   format('truetype');
+        font-weight: normal;
+        font-style: normal;
+      }
+    ══════════════════════════════════════════
+    */
+
+    :root {
+      --yellow:    #fee8aa;   /* main background / base */
+      --yellow-dk: #f5d97a;   /* darker yellow for hover states */
+      --green:     #00ae07;   /* accent – use sparingly */
+      --teal:      #349794;   /* primary interactive colour */
+      --blue:      #195782;   /* headings / dark contrast */
+      --orange:    #f9961f;   /* CTA / highlight */
+      --red:       #e5473a;   /* badge / alert accent */
+      --dark:      #0f2333;   /* footer / deep dark */
+      --text:      #1a3040;   /* body text */
+      --muted:     #5a7a8a;   /* secondary text */
+
+      /* ── FONT STACKS ── */
+      --font-name: Georgia, serif;   /* REPLACE with 'Ansing, serif' once file is added */
+      --font-body: 'Montserrat', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--yellow);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(254,232,170,.93);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(52,151,148,.2);
+    }
+
+    .nav-logo {
+      /* REPLACE font-family with 'Ansing, serif' when font is ready */
+      font-family: var(--font-name);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--blue);
+      text-decoration: none;
+      letter-spacing: .03em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--teal); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 9rem 2rem 5rem;
+      position: relative;
+    }
+
+    /* dot grid texture */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(52,151,148,.2) 1.5px, transparent 1.5px);
+      background-size: 30px 30px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, black 20%, transparent 100%);
+    }
+
+    .hero-eyebrow {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1.25rem;
+      opacity: 0;
+      animation: fadeUp .5s .2s forwards;
+    }
+
+    .hero-title {
+      /* REPLACE font-family with 'Ansing, serif' when font is ready */
+      font-family: var(--font-name);
+      font-size: clamp(3.5rem, 11vw, 8rem);
+      font-weight: 700;
+      line-height: 1;
+      color: var(--blue);
+      margin-bottom: 1.25rem;
+      opacity: 0;
+      animation: fadeUp .6s .35s forwards;
+    }
+
+    .hero-title span { color: var(--teal); }
+
+    .hero-tagline {
+      font-size: 1.05rem;
+      font-style: italic;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp .5s .5s forwards;
+    }
+
+    .hero-sub {
+      font-size: .95rem;
+      font-weight: 400;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.8;
+      margin-bottom: 2.75rem;
+      opacity: 0;
+      animation: fadeUp .5s .6s forwards;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp .5s .75s forwards;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .85rem 1.85rem;
+      border-radius: 6px;
+      font-family: var(--font-body);
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s, background .2s;
+    }
+
+    .btn-primary {
+      background: var(--orange);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(249,150,31,.3);
+    }
+
+    .btn-primary:hover {
+      background: #e8870a;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(249,150,31,.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--blue);
+      border: 2px solid var(--blue);
+    }
+
+    .btn-secondary:hover {
+      background: var(--blue);
+      color: var(--yellow);
+      transform: translateY(-2px);
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 56px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--orange));
+      margin: 0 auto;
+      border-radius: 2px;
+    }
+
+    /* ── FEATURES ── */
+    .section-wrap {
+      padding: 6rem 2rem;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4.5rem;
+    }
+
+    .section-eyebrow {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: .75rem;
+    }
+
+    .section-title {
+      /* REPLACE font-family with 'Ansing, serif' when font is ready */
+      font-family: var(--font-name);
+      font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 1.1rem;
+    }
+
+    /* ── FEATURE ROWS ── */
+    .features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5rem;
+    }
+
+    .feature-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .6s, transform .6s;
+    }
+
+    .feature-row.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .feature-row.reverse { direction: rtl; }
+    .feature-row.reverse > * { direction: ltr; }
+
+    .feature-number {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      color: var(--teal);
+      margin-bottom: .5rem;
+    }
+
+    .feature-text h3 {
+      font-family: var(--font-name);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: .75rem;
+      line-height: 1.25;
+    }
+
+    .feature-text p {
+      font-size: .9rem;
+      font-weight: 400;
+      color: var(--muted);
+      line-height: 1.85;
+    }
+
+    /* ── IMAGE PLACEHOLDER ── */
+    .feature-img {
+      aspect-ratio: 9/16;
+      max-width: 250px;
+      margin: 0 auto;
+      border-radius: 20px;
+      background: linear-gradient(145deg, var(--yellow-dk), rgba(52,151,148,.1));
+      border: 2px dashed rgba(52,151,148,.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .65rem;
+      transition: border-color .3s;
+    }
+
+    .feature-img:hover { border-color: var(--teal); }
+
+    .feature-img svg { opacity: .3; color: var(--teal); }
+
+    .feature-img span {
+      font-size: .62rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: .6;
+    }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      background: var(--blue);
+      color: var(--yellow);
+      padding: 4rem 2rem;
+    }
+
+    .stats-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: var(--font-name);
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--teal);
+      display: block;
+      margin-bottom: .3rem;
+    }
+
+    .stat-label {
+      font-size: .68rem;
+      font-weight: 600;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: rgba(254,232,170,.45);
+    }
+
+    /* ── DOWNLOAD ── */
+    .download {
+      background: var(--teal);
+      padding: 6rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .download::before,
+    .download::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .download::before {
+      width: 350px; height: 350px;
+      top: -120px; right: -80px;
+      background: rgba(255,255,255,.06);
+    }
+
+    .download::after {
+      width: 250px; height: 250px;
+      bottom: -80px; left: -60px;
+      background: rgba(0,0,0,.07);
+    }
+
+    .download h2 {
+      font-family: var(--font-name);
+      font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+      font-weight: 700;
+      color: var(--yellow);
+      margin-bottom: .75rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .download p {
+      font-size: .9rem;
+      color: rgba(254,232,170,.75);
+      max-width: 440px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.8;
+      position: relative;
+      z-index: 1;
+    }
+
+    .download-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-light {
+      background: var(--yellow);
+      color: var(--blue);
+      box-shadow: 0 4px 18px rgba(0,0,0,.15);
+    }
+
+    .btn-light:hover {
+      background: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0,0,0,.2);
+    }
+
+    .btn-outline-light {
+      background: transparent;
+      color: var(--yellow);
+      border: 2px solid rgba(254,232,170,.5);
+    }
+
+    .btn-outline-light:hover {
+      border-color: var(--yellow);
+      background: rgba(254,232,170,.1);
+      transform: translateY(-2px);
+    }
+
+    .platform-note {
+      margin-top: 1.5rem;
+      font-size: .62rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      color: rgba(254,232,170,.35);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      padding: 2rem;
+      text-align: center;
+      font-size: .65rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      color: rgba(254,232,170,.2);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 680px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { display: none; }
+      .hero { padding: 7rem 1.5rem 4rem; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .btn { width: 100%; max-width: 300px; justify-content: center; }
+      .feature-row { grid-template-columns: 1fr; gap: 2rem; }
+      .feature-row.reverse { direction: ltr; }
+      .stats-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .download-buttons { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">Side Quest</a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#download">Download</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow">⚔ Real world. Real adventures.</p>
+    <h1 class="hero-title">Side<br /><span>Quest</span></h1>
+    <p class="hero-tagline">Adventure starts off the main path</p>
+    <p class="hero-sub">
+      Discover quests hidden around your city, team up with others, earn XP, and see your name on the leaderboard.
+    </p>
+    <div class="hero-buttons">
+      <a href="#download" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M8 12l4 4 4-4M12 8v8"/></svg>
+        Get the App
+      </a>
+      <a href="#features" class="btn btn-secondary">
+        Learn More
+      </a>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section-wrap" id="features">
+    <div class="section-header">
+      <p class="section-eyebrow">What awaits you</p>
+      <h2 class="section-title">Your World, Gamified</h2>
+      <div class="divider"></div>
+    </div>
+
+    <div class="features-list">
+
+      <!-- 01 — text left, phone right -->
+      <div class="feature-row">
+        <div class="feature-text">
+          <p class="feature-number">01 ——</p>
+          <h3>Live Quest Map</h3>
+          <p>An interactive map shows every quest near you as a pin. Tap any pin to read the quest details, see who's joined, and decide if you're in.</p>
+        </div>
+        <div class="feature-img">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Map screenshot</span>
+        </div>
+      </div>
+
+      <!-- 02 — phone left, text right -->
+      <div class="feature-row reverse">
+        <div class="feature-text">
+          <p class="feature-number">02 ——</p>
+          <h3>Join & Complete Quests</h3>
+          <p>Browse all available quests in one place. Filter by type, difficulty, or distance. Solo missions or team challenges — find your match and head out.</p>
+        </div>
+        <div class="feature-img">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <span>Quests list screenshot</span>
+        </div>
+      </div>
+
+      <!-- 03 — text left, phone right -->
+      <div class="feature-row">
+        <div class="feature-text">
+          <p class="feature-number">03 ——</p>
+          <h3>Earn XP & Level Up</h3>
+          <p>Every completed quest rewards you with experience points. Level up your profile, unlock badges, and build a gallery of every quest you've conquered.</p>
+        </div>
+        <div class="feature-img">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+          <span>Profile screenshot</span>
+        </div>
+      </div>
+
+      <!-- 04 — phone left, text right -->
+      <div class="feature-row reverse">
+        <div class="feature-text">
+          <p class="feature-number">04 ——</p>
+          <h3>Leaderboard</h3>
+          <p>See how you rank against every other quester. Climb the ranks, defend your position, and let your XP do the talking.</p>
+        </div>
+        <div class="feature-img">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          <span>Leaderboard screenshot</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div>
+        <span class="stat-value">∞</span>
+        <span class="stat-label">Quests to discover</span>
+      </div>
+      <div>
+        <span class="stat-value">XP</span>
+        <span class="stat-label">Earned by doing</span>
+      </div>
+      <div>
+        <span class="stat-value">#1</span>
+        <span class="stat-label">Spot on the board</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOWNLOAD -->
+  <section class="download" id="download">
+    <h2>Begin Your Quest</h2>
+    <p>Android users download the app directly. On iOS? Open the web app instantly — no install needed.</p>
+    <div class="download-buttons">
+      <a href="YOUR_APK_RELEASE_URL" class="btn btn-light">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+        Download for Android
+      </a>
+      <a href="YOUR_WEB_APP_URL" class="btn btn-outline-light">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Open Web App
+      </a>
+    </div>
+    <p class="platform-note">Free · Android APK · iOS via Web App</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Side Quest &nbsp;·&nbsp; Built for Teenovator</p>
+  </footer>
+
+  <script>
+    // Scroll reveal for feature rows
+    const rows = document.querySelectorAll('.feature-row');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    rows.forEach(r => observer.observe(r));
+  </script>
+
+</body>
+</html>
