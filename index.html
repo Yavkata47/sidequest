@@ -68,12 +68,23 @@
     }
 
     .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    
       font-family: var(--font-name);
-      font-size: 1.25rem;
-      font-weight: 700;
+      font-size: 1.1rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+    
       color: var(--blue);
       text-decoration: none;
-      letter-spacing: .03em;
+    }
+
+    .nav-logo img {
+      height: 36px;
+      width: auto;
+      display: block;
     }
 
     .nav-links {
@@ -500,7 +511,10 @@
 
   <!-- NAV -->
   <nav>
-    <a class="nav-logo" href="#">Side Quest</a>
+    <a class="nav-logo" href="#">
+      <img src="logo.png" alt="Side Quest Logo">
+      <span>Side Quest</span>
+    </a>
     <ul class="nav-links">
       <li><a href="#features">Features</a></li>
       <li><a href="#download">Download</a></li>
