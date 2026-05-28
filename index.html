@@ -7,43 +7,56 @@
 
   <!--
     FONTS:
-    - "Ansing" is used for the app name/logo. To activate it:
-        1. Get the Ansing font file (e.g. Ansing.woff2)
-        2. Place it next to this index.html
-        3. Uncomment the @font-face block in the CSS below
-        4. Replace 'Georgia, serif' with 'Ansing, serif' in .logo and .hero-title
-    - Montserrat is loaded from Google Fonts for all other text
+    - "Ahsing" is used for the app name/logo and section headings (--font-name).
+      To activate it:
+        1. Get the font file (e.g. typogama-ahsing.otf) and place it next to index.html
+        2. The @font-face block below is already wired up – it will work automatically
+    - Montserrat is loaded from Google Fonts for Bulgarian body text (--font-bg)
+    - Inter is loaded from Google Fonts for English body text (--font-en)
+    - The <body> gets class "en" or "bg" via setLang(), which switches --font-body
   -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
+    rel="stylesheet"
+  />
 
   <style>
-      @font-face {
-        font-family: 'Ahsing';
-          src: url('typogama-ahsing.otf') format('opentype');
-          font-weight: normal;
-          font-style: normal;
-          font-display: swap;
-      }
-
-    :root {
-      --yellow:    #feeec3;   /* main background / base */
-      --yellow-dk: #feeab2;   /* darker yellow for hover states */
-      --green:     #00ae07;   /* accent – use sparingly */
-      --teal:      #349794;   /* primary interactive colour */
-      --blue:      #195782;   /* headings / dark contrast */
-      --orange:    #f9961f;   /* CTA / highlight */
-      --red:       #e5473a;   /* badge / alert accent */
-      --dark:      #0f2333;   /* footer / deep dark */
-      --text:      #1a3040;   /* body text */
-      --muted:     #5a7a8a;   /* secondary text */
-
-      /* ── FONT STACKS ── */
-      --font-logo: 'Ahsing', serif;
-      --font-en: 'Inter', sans-serif;
-      --font-bg: 'Montserrat', sans-serif;
+    /* ── CUSTOM FONT ── */
+    @font-face {
+      font-family: 'Ahsing';
+      src: url('typogama-ahsing.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
     }
+
+    /* ── TOKENS ── */
+    :root {
+      --yellow:    #feeec3;  /* main background */
+      --yellow-dk: #feeab2;  /* hover / deeper yellow */
+      --green:     #00ae07;  /* accent – use sparingly */
+      --teal:      #349794;  /* primary interactive colour */
+      --blue:      #195782;  /* headings / dark contrast */
+      --orange:    #f9961f;  /* CTA / highlight */
+      --red:       #e5473a;  /* badge / alert accent */
+      --dark:      #0f2333;  /* footer */
+      --text:      #1a3040;  /* body text */
+      --muted:     #5a7a8a;  /* secondary text */
+
+      /* ── FONT STACKS ──
+         --font-name  : display font for the logo & headings (Ahsing, falls back to serif)
+         --font-en    : body font when lang = English
+         --font-bg    : body font when lang = Bulgarian
+         --font-body  : whichever of the two is currently active (set via body class)
+      */
+      --font-name: 'Ahsing', serif;
+      --font-en:   'Inter', sans-serif;
+      --font-bg:   'Montserrat', sans-serif;
+      --font-body: var(--font-en); /* default; overridden by body.bg below */
+    }
+
+    /* Switch body font when the BG language is active */
+    body.bg { --font-body: var(--font-bg); }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -56,21 +69,8 @@
       overflow-x: hidden;
     }
 
-    body.en {
-      font-family: var(--font-en);
-    }
-
-    body.bg {
-      font-family: var(--font-bg);
-    }
-
-    h1, h2, h3 {
-      letter-spacing: 0.02em;
-    }
-
-    p {
-      line-height: 1.6;
-    }
+    h1, h2, h3 { letter-spacing: 0.02em; }
+    p { line-height: 1.6; }
 
     /* ── NAV ── */
     nav {
@@ -81,21 +81,19 @@
       align-items: center;
       justify-content: space-between;
       padding: 1rem 2.5rem;
-      background: rgba(254,232,170,.93);
+      background: rgba(254, 232, 170, .93);
       backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(52,151,148,.2);
+      border-bottom: 1px solid rgba(52, 151, 148, .2);
     }
 
     .nav-logo {
       display: flex;
       align-items: center;
       gap: 0.75rem;
-    
       font-family: var(--font-name);
       font-size: 1.1rem;
       font-weight: 400;
       letter-spacing: 0.12em;
-    
       color: var(--blue);
       text-decoration: none;
     }
@@ -125,6 +123,29 @@
 
     .nav-links a:hover { color: var(--teal); }
 
+    /* ── LANG SWITCH ── */
+    .lang-switch {
+      display: flex;
+      gap: .5rem;
+    }
+
+    .lang-switch button {
+      background: transparent;
+      border: 1.5px solid rgba(52, 151, 148, .35);
+      border-radius: 4px;
+      padding: .25rem .6rem;
+      font-family: var(--font-en); /* always English font for the labels */
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+
+    .lang-switch button:hover,
+    .lang-switch button.active { border-color: var(--teal); color: var(--teal); }
+
     /* ── HERO ── */
     .hero {
       min-height: 100vh;
@@ -137,12 +158,12 @@
       position: relative;
     }
 
-    /* dot grid texture */
+    /* dot-grid texture */
     .hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      background-image: radial-gradient(circle, rgba(52,151,148,.2) 1.5px, transparent 1.5px);
+      background-image: radial-gradient(circle, rgba(52, 151, 148, .2) 1.5px, transparent 1.5px);
       background-size: 30px 30px;
       pointer-events: none;
       mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, black 20%, transparent 100%);
@@ -223,13 +244,13 @@
     .btn-primary {
       background: var(--orange);
       color: #fff;
-      box-shadow: 0 4px 16px rgba(249,150,31,.3);
+      box-shadow: 0 4px 16px rgba(249, 150, 31, .3);
     }
 
     .btn-primary:hover {
       background: #e8870a;
       transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(249,150,31,.4);
+      box-shadow: 0 8px 28px rgba(249, 150, 31, .4);
     }
 
     .btn-secondary {
@@ -253,7 +274,7 @@
       border-radius: 2px;
     }
 
-    /* ── FEATURES ── */
+    /* ── FEATURES SECTION ── */
     .section-wrap {
       padding: 6rem 2rem;
       max-width: 1080px;
@@ -304,8 +325,9 @@
       transform: translateY(0);
     }
 
-    .feature-row.reverse { direction: rtl; }
-    .feature-row.reverse > * { direction: ltr; }
+    /* Mirror text-right rows without flipping child content */
+    .feature-row.reverse          { direction: rtl; }
+    .feature-row.reverse > *      { direction: ltr; }
 
     .feature-number {
       font-size: .68rem;
@@ -331,14 +353,14 @@
       line-height: 1.85;
     }
 
-    /* ── IMAGE PLACEHOLDER ── */
+    /* ── SCREENSHOT PLACEHOLDER ── */
     .feature-img {
-      aspect-ratio: 9/16;
+      aspect-ratio: 9 / 16;
       max-width: 250px;
       margin: 0 auto;
       border-radius: 20px;
-      background: linear-gradient(145deg, var(--yellow-dk), rgba(52,151,148,.1));
-      border: 2px dashed rgba(52,151,148,.35);
+      background: linear-gradient(145deg, var(--yellow-dk), rgba(52, 151, 148, .1));
+      border: 2px dashed rgba(52, 151, 148, .35);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -349,7 +371,10 @@
 
     .feature-img:hover { border-color: var(--teal); }
 
-    .feature-img svg { opacity: .3; color: var(--teal); }
+    .feature-img svg {
+      opacity: .3;
+      color: var(--teal);
+    }
 
     .feature-img span {
       font-size: .62rem;
@@ -360,48 +385,46 @@
       opacity: .6;
     }
 
-    /* ── CONTACTS ── */
-        .social-strip {
+    /* ── SOCIAL STRIP ── */
+    .social-strip {
       background: var(--blue);
       color: var(--yellow);
       padding: 4rem 2rem;
       text-align: center;
     }
-    
+
     .social-inner {
       max-width: 700px;
       margin: 0 auto;
     }
-    
+
     .social-inner h3 {
       font-family: var(--font-name);
       font-size: 1.8rem;
       margin-bottom: 0.5rem;
     }
-    
+
     .social-inner p {
       font-size: 0.9rem;
-      color: rgba(254,232,170,.7);
+      color: rgba(254, 232, 170, .7);
       margin-bottom: 1.5rem;
     }
-    
+
     .social-links {
       display: flex;
       justify-content: center;
       gap: 2rem;
     }
-    
+
     .social-links a {
       color: var(--yellow);
       text-decoration: none;
       font-weight: 600;
       letter-spacing: 0.1em;
-      transition: 0.2s;
+      transition: color .2s;
     }
-    
-    .social-links a:hover {
-      color: var(--teal);
-    }
+
+    .social-links a:hover { color: var(--teal); }
 
     /* ── DOWNLOAD ── */
     .download {
@@ -412,6 +435,7 @@
       overflow: hidden;
     }
 
+    /* decorative blobs */
     .download::before,
     .download::after {
       content: '';
@@ -423,13 +447,13 @@
     .download::before {
       width: 350px; height: 350px;
       top: -120px; right: -80px;
-      background: rgba(255,255,255,.06);
+      background: rgba(255, 255, 255, .06);
     }
 
     .download::after {
       width: 250px; height: 250px;
       bottom: -80px; left: -60px;
-      background: rgba(0,0,0,.07);
+      background: rgba(0, 0, 0, .07);
     }
 
     .download h2 {
@@ -442,9 +466,9 @@
       z-index: 1;
     }
 
-    .download p {
+    .download > p {
       font-size: .9rem;
-      color: rgba(254,232,170,.75);
+      color: rgba(254, 232, 170, .75);
       max-width: 440px;
       margin: 0 auto 2.5rem;
       line-height: 1.8;
@@ -464,24 +488,24 @@
     .btn-light {
       background: var(--yellow);
       color: var(--blue);
-      box-shadow: 0 4px 18px rgba(0,0,0,.15);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, .15);
     }
 
     .btn-light:hover {
       background: #fff;
       transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(0,0,0,.2);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, .2);
     }
 
     .btn-outline-light {
       background: transparent;
       color: var(--yellow);
-      border: 2px solid rgba(254,232,170,.5);
+      border: 2px solid rgba(254, 232, 170, .5);
     }
 
     .btn-outline-light:hover {
       border-color: var(--yellow);
-      background: rgba(254,232,170,.1);
+      background: rgba(254, 232, 170, .1);
       transform: translateY(-2px);
     }
 
@@ -490,7 +514,7 @@
       font-size: .62rem;
       font-weight: 600;
       letter-spacing: .1em;
-      color: rgba(254,232,170,.35);
+      color: rgba(254, 232, 170, .35);
       position: relative;
       z-index: 1;
     }
@@ -503,7 +527,7 @@
       font-size: .65rem;
       font-weight: 500;
       letter-spacing: .1em;
-      color: rgba(254,232,170,.2);
+      color: rgba(254, 232, 170, .2);
     }
 
     /* ── ANIMATIONS ── */
@@ -512,7 +536,7 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── MOBILE ── */
+    /* ── RESPONSIVE ── */
     @media (max-width: 680px) {
       nav { padding: 1rem 1.25rem; }
       .nav-links { display: none; }
@@ -520,8 +544,7 @@
       .hero-buttons { flex-direction: column; align-items: center; }
       .btn { width: 100%; max-width: 300px; justify-content: center; }
       .feature-row { grid-template-columns: 1fr; gap: 2rem; }
-      .feature-row.reverse { direction: ltr; }
-      .stats-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .feature-row.reverse { direction: ltr; } /* undo RTL trick on mobile */
       .download-buttons { flex-direction: column; align-items: center; }
     }
   </style>
@@ -531,34 +554,39 @@
   <!-- NAV -->
   <nav>
     <a class="nav-logo" href="#">
-      <img src="logo.png" alt="Side Quest Logo">
+      <img src="logo.png" alt="Side Quest logo" />
       <span>Side Quest</span>
     </a>
+
     <ul class="nav-links">
-      <li><a href="#features">Features</a></li>
-      <li><a href="#download">Download</a></li>
+      <li><a href="#features" data-en="Features"  data-bg="Функции">Features</a></li>
+      <li><a href="#download" data-en="Download"  data-bg="Изтегли">Download</a></li>
     </ul>
+
     <div class="lang-switch">
-      <button onclick="setLang('en')">EN</button>
-      <button onclick="setLang('bg')">BG</button>
+      <button id="btn-en" onclick="setLang('en')">EN</button>
+      <button id="btn-bg" onclick="setLang('bg')">BG</button>
     </div>
   </nav>
 
   <!-- HERO -->
   <section class="hero">
-    <p class="hero-eyebrow">⚔ Real world. Real adventures.</p>
+    <p class="hero-eyebrow"  data-en="⚔ Real world. Real adventures." data-bg="⚔ Истинският свят. Истински приключения.">⚔ Real world. Real adventures.</p>
     <h1 class="hero-title">Side<br /><span>Quest</span></h1>
-    <p class="hero-tagline">Adventure starts off the main path</p>
-    <p class="hero-sub">
+    <p class="hero-tagline"  data-en="Adventure starts off the main path"  data-bg="Приключението започва встрани от пътя">Adventure starts off the main path</p>
+    <p class="hero-sub"
+       data-en="Discover quests hidden around your city, team up with others, earn XP, and see your name on the leaderboard."
+       data-bg="Открий куестове скрити из твоя град, събери отбор, спечели XP и се изкачи в класацията.">
       Discover quests hidden around your city, team up with others, earn XP, and see your name on the leaderboard.
     </p>
+
     <div class="hero-buttons">
       <a href="#download" class="btn btn-primary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M8 12l4 4 4-4M12 8v8"/></svg>
-        Get the App
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M8 12l4 4 4-4M12 8v8"/></svg>
+        <span data-en="Get the App" data-bg="Изтегли приложението">Get the App</span>
       </a>
       <a href="#features" class="btn btn-secondary">
-        Learn More
+        <span data-en="Learn More" data-bg="Научи повече">Learn More</span>
       </a>
     </div>
   </section>
@@ -566,95 +594,113 @@
   <!-- FEATURES -->
   <section class="section-wrap" id="features">
     <div class="section-header">
-      <p class="section-eyebrow">What awaits you</p>
-      <h2 class="section-title">Your World, Gamified</h2>
+      <p class="section-eyebrow" data-en="What awaits you"      data-bg="Какво те очаква">What awaits you</p>
+      <h2 class="section-title"  data-en="Your World, Gamified" data-bg="Твоят свят, геймифициран">Your World, Gamified</h2>
       <div class="divider"></div>
     </div>
 
     <div class="features-list">
 
-      <!-- 01 — text left, phone right -->
+      <!-- 01 — text left, screenshot right -->
       <div class="feature-row">
         <div class="feature-text">
           <p class="feature-number">01 ——</p>
-          <h3>Live Quest Map</h3>
-          <p>An interactive map shows every quest near you as a pin. Tap any pin to read the quest details, see who's joined, and decide if you're in.</p>
+          <h3 data-en="Live Quest Map"     data-bg="Карта на куестове на живо">Live Quest Map</h3>
+          <p  data-en="An interactive map shows every quest near you as a pin. Tap any pin to read the quest details, see who's joined, and decide if you're in."
+              data-bg="Интерактивна карта показва всеки куест наблизо като маркер. Натисни го, за да видиш детайли, кой участва и дали искаш да се включиш.">
+            An interactive map shows every quest near you as a pin. Tap any pin to read the quest details, see who's joined, and decide if you're in.
+          </p>
         </div>
-        <div class="feature-img">
+        <div class="feature-img" aria-hidden="true">
           <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <span>Map screenshot</span>
+          <span data-en="Map screenshot" data-bg="Снимка на картата">Map screenshot</span>
         </div>
       </div>
 
-      <!-- 02 — phone left, text right -->
+      <!-- 02 — screenshot left, text right -->
       <div class="feature-row reverse">
         <div class="feature-text">
           <p class="feature-number">02 ——</p>
-          <h3>Join & Complete Quests</h3>
-          <p>Browse all available quests in one place. Filter by type, difficulty, or distance. Solo missions or team challenges — find your match and head out.</p>
+          <h3 data-en="Join &amp; Complete Quests" data-bg="Присъедини се и завърши куестове">Join &amp; Complete Quests</h3>
+          <p  data-en="Browse all available quests in one place. Filter by type, difficulty, or distance. Solo missions or team challenges — find your match and head out."
+              data-bg="Разгледай всички налични куестове. Филтрирай по тип, трудност или разстояние. Соло мисии или отборни предизвикателства — намери своя и тръгвай.">
+            Browse all available quests in one place. Filter by type, difficulty, or distance. Solo missions or team challenges — find your match and head out.
+          </p>
         </div>
-        <div class="feature-img">
+        <div class="feature-img" aria-hidden="true">
           <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-          <span>Quests list screenshot</span>
+          <span data-en="Quests list screenshot" data-bg="Снимка на списъка с куестове">Quests list screenshot</span>
         </div>
       </div>
 
-      <!-- 03 — text left, phone right -->
+      <!-- 03 — text left, screenshot right -->
       <div class="feature-row">
         <div class="feature-text">
           <p class="feature-number">03 ——</p>
-          <h3>Earn XP & Level Up</h3>
-          <p>Every completed quest rewards you with experience points. Level up your profile, unlock badges, and build a gallery of every quest you've conquered.</p>
+          <h3 data-en="Earn XP &amp; Level Up"   data-bg="Спечели XP и се развий">Earn XP &amp; Level Up</h3>
+          <p  data-en="Every completed quest rewards you with experience points. Level up your profile, unlock badges, and build a gallery of every quest you've conquered."
+              data-bg="Всеки завършен куест ти носи точки опит. Качи се в нива, отключи значки и изгради галерия от всяко преминато приключение.">
+            Every completed quest rewards you with experience points. Level up your profile, unlock badges, and build a gallery of every quest you've conquered.
+          </p>
         </div>
-        <div class="feature-img">
+        <div class="feature-img" aria-hidden="true">
           <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-          <span>Profile screenshot</span>
+          <span data-en="Profile screenshot" data-bg="Снимка на профила">Profile screenshot</span>
         </div>
       </div>
 
-      <!-- 04 — phone left, text right -->
+      <!-- 04 — screenshot left, text right -->
       <div class="feature-row reverse">
         <div class="feature-text">
           <p class="feature-number">04 ——</p>
-          <h3>Leaderboard</h3>
-          <p>See how you rank against every other quester. Climb the ranks, defend your position, and let your XP do the talking.</p>
+          <h3 data-en="Leaderboard"     data-bg="Класация">Leaderboard</h3>
+          <p  data-en="See how you rank against every other quester. Climb the ranks, defend your position, and let your XP do the talking."
+              data-bg="Виж как се нареждаш сред останалите. Изкачи се, защити позицията си и нека XP-то те говори.">
+            See how you rank against every other quester. Climb the ranks, defend your position, and let your XP do the talking.
+          </p>
         </div>
-        <div class="feature-img">
+        <div class="feature-img" aria-hidden="true">
           <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-          <span>Leaderboard screenshot</span>
+          <span data-en="Leaderboard screenshot" data-bg="Снимка на класацията">Leaderboard screenshot</span>
         </div>
       </div>
 
     </div>
   </section>
 
-  <!-- CONTACTS -->
+  <!-- SOCIAL -->
   <section class="social-strip">
-      <div class="social-inner">
-        <h3>Follow Side Quest</h3>
-        <p>Get updates, sneak peeks, and community quests.</p>
-
+    <div class="social-inner">
+      <h3 data-en="Follow Side Quest"                          data-bg="Последвай Side Quest">Follow Side Quest</h3>
+      <p  data-en="Get updates, sneak peeks, and community quests." data-bg="Получавай новини, преглед отзад и общностни куестове.">
+        Get updates, sneak peeks, and community quests.
+      </p>
       <div class="social-links">
-        <a href="https://www.tiktok.com/@the_sidequest_app" target="_blank">TikTok</a>
-        <a href="https://www.instagram.com/the.sidequest.app/" target="_blank">Instagram</a>
-        </div>
+        <a href="https://www.tiktok.com/@the_sidequest_app"    target="_blank" rel="noopener">TikTok</a>
+        <a href="https://www.instagram.com/the.sidequest.app/" target="_blank" rel="noopener">Instagram</a>
       </div>
-    </section>
+    </div>
+  </section>
 
   <!-- DOWNLOAD -->
   <section class="download" id="download">
-    <h2>Begin Your Quest</h2>
-    <p>Android users download the app directly. On iOS? Open the web app instantly — no install needed.</p>
+    <h2 data-en="Begin Your Quest" data-bg="Започни куеста си">Begin Your Quest</h2>
+    <p  data-en="Android users download the app directly. On iOS? Open the web app instantly — no install needed."
+        data-bg="Android потребителите изтеглят приложението директно. iOS? Отвори уеб версията мигновено — без инсталация.">
+      Android users download the app directly. On iOS? Open the web app instantly — no install needed.
+    </p>
+
     <div class="download-buttons">
       <a href="YOUR_APK_RELEASE_URL" class="btn btn-light">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
-        Download for Android
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+        <span data-en="Download for Android" data-bg="Изтегли за Android">Download for Android</span>
       </a>
       <a href="YOUR_WEB_APP_URL" class="btn btn-outline-light">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        Open Web App
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span data-en="Open Web App" data-bg="Отвори уеб версията">Open Web App</span>
       </a>
     </div>
+
     <p class="platform-note">Free · Android APK · iOS via Web App</p>
   </section>
 
@@ -664,8 +710,8 @@
   </footer>
 
   <script>
-    // Scroll reveal for feature rows
-    const rows = document.querySelectorAll('.feature-row');
+    /* ── SCROLL REVEAL ── */
+    const rows     = document.querySelectorAll('.feature-row');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
@@ -675,24 +721,34 @@
       });
     }, { threshold: 0.12 });
     rows.forEach(r => observer.observe(r));
+
+    /* ── LANGUAGE SWITCH ──
+       Each translatable element carries data-en and data-bg attributes.
+       setLang() walks them all and swaps the text content, then updates
+       the body class so the right font stack kicks in via CSS.
+    */
+    function setLang(lang) {
+      /* update body class → triggers CSS font switch */
+      document.body.classList.remove('en', 'bg');
+      document.body.classList.add(lang);
+
+      /* update html[lang] for accessibility */
+      document.documentElement.lang = lang;
+
+      /* swap all translatable text nodes */
+      document.querySelectorAll('[data-en]').forEach(el => {
+        el.textContent = el.dataset[lang] || el.dataset.en;
+      });
+
+      /* highlight the active button */
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+      document.getElementById('btn-bg').classList.toggle('active', lang === 'bg');
+    }
+
+    /* Auto-detect browser language on first load */
+    const browserLang = (navigator.language || navigator.userLanguage || 'en').slice(0, 2);
+    setLang(browserLang === 'bg' ? 'bg' : 'en');
   </script>
-
-  <!-- LANGUAGE -->
-
-  <script>
-function setLang(lang) {
-  document.body.classList.remove('en', 'bg');
-  document.body.classList.add(lang);
-}
-
-const lang = navigator.language || navigator.userLanguage;
-
-if (lang.startsWith('bg')) {
-  setLang('bg');
-} else {
-  setLang('en');
-}
-</script>
 
 </body>
 </html>
