@@ -16,6 +16,8 @@
   -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
 
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap&subset=cyrillic" rel="stylesheet">
+
   <style>
       @font-face {
         font-family: 'Ahsing';
@@ -38,8 +40,9 @@
       --muted:     #5a7a8a;   /* secondary text */
 
       /* ── FONT STACKS ── */
-      --font-name: 'Ahsing', serif;
-      --font-body: 'Montserrat', sans-serif;
+      --font-logo: 'Ahsing', serif;
+      --font-en: 'Inter', sans-serif;
+      --font-bg: 'Montserrat', sans-serif;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -51,6 +54,22 @@
       font-family: var(--font-body);
       font-size: 16px;
       overflow-x: hidden;
+    }
+
+    body.en {
+      font-family: var(--font-en);
+    }
+
+    body.bg {
+      font-family: var(--font-bg);
+    }
+
+    h1, h2, h3 {
+      letter-spacing: 0.02em;
+    }
+
+    p {
+      line-height: 1.6;
     }
 
     /* ── NAV ── */
@@ -142,7 +161,7 @@
 
     .hero-title {
       font-family: var(--font-name);
-      font-size: clamp(3.5rem, 11vw, 8rem);
+      font-size: clamp(3rem, 8vw, 6rem);
       font-weight: 700;
       line-height: 1;
       color: var(--blue);
@@ -661,33 +680,17 @@
   <!-- LANGUAGE -->
 
   <script>
-const translations = {
-  en: {
-    tagline: "Adventure starts off the main path",
-    desc: "Discover quests hidden around your city, team up with others, earn XP, and see your name on the leaderboard.",
-    btn1: "Get the App",
-    btn2: "Learn More",
-    follow: "Follow Side Quest",
-    followDesc: "Get updates, sneak peeks, and community quests."
-  },
-  bg: {
-    tagline: "Приключението започва извън основния път",
-    desc: "Откривай мисии около твоя град, събирай се с други играчи, печели XP и се изкачвай в класацията.",
-    btn1: "Вземи приложението",
-    btn2: "Научи повече",
-    follow: "Следвай Side Quest",
-    followDesc: "Получавай новини, предварителни погледи и мисии от общността."
-  }
-};
-
 function setLang(lang) {
-  document.querySelector(".hero-tagline").textContent = translations[lang].tagline;
-  document.querySelector(".hero-sub").textContent = translations[lang].desc;
-  document.querySelector(".btn-primary").childNodes[2].textContent = translations[lang].btn1;
-  document.querySelector(".btn-secondary").textContent = translations[lang].btn2;
+  document.body.classList.remove('en', 'bg');
+  document.body.classList.add(lang);
+}
 
-  document.querySelector(".social-inner h3").textContent = translations[lang].follow;
-  document.querySelector(".social-inner p").textContent = translations[lang].followDesc;
+const lang = navigator.language || navigator.userLanguage;
+
+if (lang.startsWith('bg')) {
+  setLang('bg');
+} else {
+  setLang('en');
 }
 </script>
 
