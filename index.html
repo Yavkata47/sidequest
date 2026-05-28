@@ -68,7 +68,6 @@
     }
 
     .nav-logo {
-      /* REPLACE font-family with 'Ansing, serif' when font is ready */
       font-family: var(--font-name);
       font-size: 1.25rem;
       font-weight: 700;
@@ -131,7 +130,6 @@
     }
 
     .hero-title {
-      /* REPLACE font-family with 'Ansing, serif' when font is ready */
       font-family: var(--font-name);
       font-size: clamp(3.5rem, 11vw, 8rem);
       font-weight: 700;
@@ -247,7 +245,6 @@
     }
 
     .section-title {
-      /* REPLACE font-family with 'Ansing, serif' when font is ready */
       font-family: var(--font-name);
       font-size: clamp(1.6rem, 3.5vw, 2.4rem);
       font-weight: 700;
@@ -333,37 +330,47 @@
       opacity: .6;
     }
 
-    /* ── STATS STRIP ── */
-    .stats-strip {
+    /* ── CONTACTS ── */
+        .social-strip {
       background: var(--blue);
       color: var(--yellow);
       padding: 4rem 2rem;
-    }
-
-    .stats-inner {
-      max-width: 860px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
       text-align: center;
     }
-
-    .stat-value {
-      font-family: var(--font-name);
-      font-size: 2.8rem;
-      font-weight: 700;
-      color: var(--teal);
-      display: block;
-      margin-bottom: .3rem;
+    
+    .social-inner {
+      max-width: 700px;
+      margin: 0 auto;
     }
-
-    .stat-label {
-      font-size: .68rem;
+    
+    .social-inner h3 {
+      font-family: var(--font-name);
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .social-inner p {
+      font-size: 0.9rem;
+      color: rgba(254,232,170,.7);
+      margin-bottom: 1.5rem;
+    }
+    
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+    }
+    
+    .social-links a {
+      color: var(--yellow);
+      text-decoration: none;
       font-weight: 600;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: rgba(254,232,170,.45);
+      letter-spacing: 0.1em;
+      transition: 0.2s;
+    }
+    
+    .social-links a:hover {
+      color: var(--teal);
     }
 
     /* ── DOWNLOAD ── */
@@ -498,6 +505,10 @@
       <li><a href="#features">Features</a></li>
       <li><a href="#download">Download</a></li>
     </ul>
+    <div class="lang-switch">
+      <button onclick="setLang('en')">EN</button>
+      <button onclick="setLang('bg')">BG</button>
+    </div>
   </nav>
 
   <!-- HERO -->
@@ -584,23 +595,18 @@
     </div>
   </section>
 
-  <!-- STATS STRIP -->
-  <div class="stats-strip">
-    <div class="stats-inner">
-      <div>
-        <span class="stat-value">∞</span>
-        <span class="stat-label">Quests to discover</span>
+  <!-- CONTACTS -->
+  <section class="social-strip">
+      <div class="social-inner">
+        <h3>Follow Side Quest</h3>
+        <p>Get updates, sneak peeks, and community quests.</p>
+
+      <div class="social-links">
+        <a href="https://www.tiktok.com/@the_sidequest_app" target="_blank">TikTok</a>
+        <a href="https://www.instagram.com/the.sidequest.app/" target="_blank">Instagram</a>
+        </div>
       </div>
-      <div>
-        <span class="stat-value">XP</span>
-        <span class="stat-label">Earned by doing</span>
-      </div>
-      <div>
-        <span class="stat-value">#1</span>
-        <span class="stat-label">Spot on the board</span>
-      </div>
-    </div>
-  </div>
+    </section>
 
   <!-- DOWNLOAD -->
   <section class="download" id="download">
@@ -621,7 +627,7 @@
 
   <!-- FOOTER -->
   <footer>
-    <p>© 2025 Side Quest &nbsp;·&nbsp; Built for Teenovator</p>
+    <p>© 2026 Side Quest &nbsp;·&nbsp; Built for Teenovator</p>
   </footer>
 
   <script>
@@ -637,6 +643,39 @@
     }, { threshold: 0.12 });
     rows.forEach(r => observer.observe(r));
   </script>
+
+  <!-- LANGUAGE -->
+
+  <script>
+const translations = {
+  en: {
+    tagline: "Adventure starts off the main path",
+    desc: "Discover quests hidden around your city, team up with others, earn XP, and see your name on the leaderboard.",
+    btn1: "Get the App",
+    btn2: "Learn More",
+    follow: "Follow Side Quest",
+    followDesc: "Get updates, sneak peeks, and community quests."
+  },
+  bg: {
+    tagline: "Приключението започва извън основния път",
+    desc: "Откривай мисии около твоя град, събирай се с други играчи, печели XP и се изкачвай в класацията.",
+    btn1: "Вземи приложението",
+    btn2: "Научи повече",
+    follow: "Следвай Side Quest",
+    followDesc: "Получавай новини, предварителни погледи и мисии от общността."
+  }
+};
+
+function setLang(lang) {
+  document.querySelector(".hero-tagline").textContent = translations[lang].tagline;
+  document.querySelector(".hero-sub").textContent = translations[lang].desc;
+  document.querySelector(".btn-primary").childNodes[2].textContent = translations[lang].btn1;
+  document.querySelector(".btn-secondary").textContent = translations[lang].btn2;
+
+  document.querySelector(".social-inner h3").textContent = translations[lang].follow;
+  document.querySelector(".social-inner p").textContent = translations[lang].followDesc;
+}
+</script>
 
 </body>
 </html>
