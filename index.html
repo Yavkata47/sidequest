@@ -369,9 +369,13 @@
       transition: border-color .3s;
     }
 
-    .feature-img:hover { border-color: var(--teal); }
-
-    .feature-img svg {
+    .feature-img--photo {
+      display: block;
+      object-fit: cover;
+      border: none;
+      background: none;
+      box-shadow: 0 12px 40px rgba(15, 35, 51, .15);
+    }
       opacity: .3;
       color: var(--teal);
     }
@@ -630,10 +634,7 @@
             An interactive map shows every quest near you as a pin. Tap any pin to open the details panel, see who's joined, and decide if you're in. You can also filter quests by skill, time, distance — or just make your own.
           </p>
         </div>
-        <div class="feature-img" aria-hidden="true">
-          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <span data-en="Map screenshot" data-bg="Снимка на картата">Map screenshot</span>
-        </div>
+        <img src="section_one.jpg" alt="Live Quest Map" class="feature-img feature-img--photo" />
       </div>
 
       <!-- 02 — screenshot left, text right -->
@@ -646,10 +647,7 @@
             Browse all available quests in one place. Filter by type, difficulty, or distance. Solo missions or team challenges — find your match and head out.
           </p>
         </div>
-        <div class="feature-img" aria-hidden="true">
-          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-          <span data-en="Quests list screenshot" data-bg="Снимка на списъка с куестове">Quests list screenshot</span>
-        </div>
+        <img src="section_two.jpg" alt="All Quests" class="feature-img feature-img--photo" />
       </div>
 
       <!-- 03 — text left, screenshot right -->
@@ -662,10 +660,7 @@
             Every completed quest rewards you with experience points. Level up your profile, unlock badges, and build a gallery of every quest you've conquered.
           </p>
         </div>
-        <div class="feature-img" aria-hidden="true">
-          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-          <span data-en="Profile screenshot" data-bg="Снимка на профила">Profile screenshot</span>
-        </div>
+        <img src="section_three.jpg" alt="Leaderboard" class="feature-img feature-img--photo" />
       </div>
 
       <!-- 04 — screenshot left, text right -->
@@ -678,10 +673,7 @@
             See how you rank against every other quester. Climb the ranks, defend your position, and let your XP do the talking.
           </p>
         </div>
-        <div class="feature-img" aria-hidden="true">
-          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-          <span data-en="Leaderboard screenshot" data-bg="Снимка на класацията">Leaderboard screenshot</span>
-        </div>
+        <img src="section_four.jpg" alt="Account" class="feature-img feature-img--photo" />
       </div>
 
     </div>
@@ -691,7 +683,7 @@
   <section class="social-strip">
     <div class="social-inner">
       <h3 data-en="Follow Side Quest"                          data-bg="Последвай Side Quest">Follow Side Quest</h3>
-      <p  data-en="Get updates, sneak peeks, and community quests." data-bg="Получавай новини, ексклузивни погледи и общностни куестове.">
+      <p  data-en="Get updates, sneak peeks, and community quests." data-bg="Получавай новини, преглед отзад и общностни куестове.">
         Get updates, sneak peeks, and community quests.
       </p>
       <div class="social-links">
@@ -709,7 +701,7 @@
 
   <!-- DOWNLOAD -->
   <section class="download" id="download">
-    <h2 data-en="Try It Now" data-bg="Пробвай сега">Try It Now</h2>
+    <h2 data-en="Try It Now" data-bg="Опитай сега">Try It Now</h2>
     <p  data-en="Jump straight into the web app — no install needed. Native apps for Android and iOS are on the way."
         data-bg="Влез директно в уеб версията — без инсталация. Нативни приложения за Android и iOS идват скоро.">
       Jump straight into the web app — no install needed. Native apps for Android and iOS are on the way.
